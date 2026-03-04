@@ -1,239 +1,96 @@
-const DIRECTIONS = {
-  up: { x: 0, y: -1 },
-  down: { x: 0, y: 1 },
-  left: { x: -1, y: 0 },
-  right: { x: 1, y: 0 }
-};
+const books = [
+  { title: "Katya", pdf: "./books/book-1.pdf" },
+  { title: "Esther", pdf: "./books/book-2.pdf" },
+  { title: "Lola", pdf: "./books/book-3.pdf" },
+  { title: "Sarp", pdf: "./books/book-4.pdf" },
+  { title: "Picture Book 5", pdf: "./books/book-5.pdf" },
+  { title: "Picture Book 6", pdf: "./books/book-6.pdf" },
+  { title: "Picture Book 7", pdf: "./books/book-7.pdf" },
+  { title: "Picture Book 8", pdf: "./books/book-8.pdf" },
+  { title: "Picture Book 9", pdf: "./books/book-9.pdf" }
+];
 
-function createInitialState(size = 20) {
-  const center = Math.floor(size / 2);
-  const snake = [
-    { x: center, y: center },
-    { x: center - 1, y: center },
-    { x: center - 2, y: center }
-  ];
+const bookGrid = document.getElementById("bookGrid");
+const modal = document.getElementById("bookModal");
+const modalTitle = document.getElementById("modalTitle");
+const bookFrame = document.getElementById("bookFrame");
+const closeModalBtn = document.getElementById("closeModal");
+const prevBookBtn = document.getElementById("prevBook");
+const nextBookBtn = document.getElementById("nextBook");
 
-  return {
-    size,
-    snake,
-    direction: "right",
-    pendingDirection: "right",
-    food: placeFood(snake, size),
-    score: 0,
-    gameOver: false,
-    paused: false,
-    started: false
-  };
+let activeIndex = -1;
+
+function renderBooks() {
+  const cards = books
+    .map(
+      (book, index) => `
+        <button class="book-card" type="button" data-index="${index}" aria-label="Open ${book.title}">
+          <iframe
+            class="book-thumb"
+            src="${book.pdf}#page=1&zoom=page-fit"
+            title="${book.title} preview"
+            loading="lazy"
+          ></iframe>
+          <div class="book-meta">
+            <p class="book-title">${book.title}</p>
+            <p class="book-sub">Click to open reader</p>
+          </div>
+        </button>
+      `
+    )
+    .join("");
+
+  bookGrid.innerHTML = cards;
 }
 
-function isOppositeDirection(current, next) {
-  return (
-    (current === "up" && next === "down") ||
-    (current === "down" && next === "up") ||
-    (current === "left" && next === "right") ||
-    (current === "right" && next === "left")
-  );
+function openBook(index) {
+  activeIndex = index;
+  const book = books[activeIndex];
+  modalTitle.textContent = book.title;
+  bookFrame.src = `${book.pdf}#page=1&zoom=page-width`;
+  modal.classList.add("open");
+  modal.setAttribute("aria-hidden", "false");
 }
 
-function applyDirection(state, nextDirection) {
-  if (!DIRECTIONS[nextDirection]) return state;
-  if (isOppositeDirection(state.direction, nextDirection)) return state;
-  return { ...state, pendingDirection: nextDirection };
+function closeModal() {
+  modal.classList.remove("open");
+  modal.setAttribute("aria-hidden", "true");
+  bookFrame.src = "";
+  activeIndex = -1;
 }
 
-function tick(state, rng = Math.random) {
-  if (state.gameOver || state.paused || !state.started) {
-    return state;
+function openAdjacent(step) {
+  if (activeIndex < 0) return;
+  const nextIndex = (activeIndex + step + books.length) % books.length;
+  openBook(nextIndex);
+}
+
+bookGrid.addEventListener("click", (event) => {
+  const card = event.target.closest(".book-card");
+  if (!card) return;
+  openBook(Number(card.dataset.index));
+});
+
+closeModalBtn.addEventListener("click", closeModal);
+prevBookBtn.addEventListener("click", () => openAdjacent(-1));
+nextBookBtn.addEventListener("click", () => openAdjacent(1));
+
+modal.addEventListener("click", (event) => {
+  if (event.target === modal) {
+    closeModal();
   }
-
-  const direction = state.pendingDirection;
-  const velocity = DIRECTIONS[direction];
-  const head = state.snake[0];
-  const nextHead = { x: head.x + velocity.x, y: head.y + velocity.y };
-
-  const hitWall =
-    nextHead.x < 0 ||
-    nextHead.y < 0 ||
-    nextHead.x >= state.size ||
-    nextHead.y >= state.size;
-
-  if (hitWall || collidesWithBody(nextHead, state.snake)) {
-    return { ...state, direction, gameOver: true };
-  }
-
-  const ateFood = nextHead.x === state.food.x && nextHead.y === state.food.y;
-  const grownSnake = [nextHead, ...state.snake];
-  const snake = ateFood ? grownSnake : grownSnake.slice(0, -1);
-
-  return {
-    ...state,
-    snake,
-    direction,
-    food: ateFood ? placeFood(snake, state.size, rng) : state.food,
-    score: ateFood ? state.score + 1 : state.score
-  };
-}
-
-function togglePause(state) {
-  if (!state.started || state.gameOver) return state;
-  return { ...state, paused: !state.paused };
-}
-
-function startGame(state) {
-  return { ...state, started: true, paused: false, gameOver: false };
-}
-
-function placeFood(snake, size, rng = Math.random) {
-  const openCells = [];
-
-  for (let y = 0; y < size; y += 1) {
-    for (let x = 0; x < size; x += 1) {
-      if (!snake.some((segment) => segment.x === x && segment.y === y)) {
-        openCells.push({ x, y });
-      }
-    }
-  }
-
-  if (openCells.length === 0) {
-    return snake[0];
-  }
-
-  const index = Math.floor(rng() * openCells.length);
-  return openCells[index];
-}
-
-function collidesWithBody(head, snake) {
-  return snake.some((segment) => segment.x === head.x && segment.y === head.y);
-}
-
-const board = document.getElementById("board");
-const ctx = board.getContext("2d");
-const scoreEl = document.getElementById("score");
-const highScoreEl = document.getElementById("highScore");
-const statusEl = document.getElementById("status");
-const startBtn = document.getElementById("startBtn");
-const pauseBtn = document.getElementById("pauseBtn");
-const touchButtons = document.querySelectorAll("[data-dir]");
-
-const gridSize = 20;
-const tickMs = 130;
-const cellSize = board.width / gridSize;
-
-let state = createInitialState(gridSize);
-let highScore = 0;
-
-const keyToDirection = {
-  ArrowUp: "up",
-  ArrowDown: "down",
-  ArrowLeft: "left",
-  ArrowRight: "right",
-  w: "up",
-  a: "left",
-  s: "down",
-  d: "right"
-};
-
-function draw() {
-  ctx.clearRect(0, 0, board.width, board.height);
-  drawGrid();
-
-  ctx.fillStyle = getCssVar("--food");
-  ctx.fillRect(
-    state.food.x * cellSize,
-    state.food.y * cellSize,
-    cellSize,
-    cellSize
-  );
-
-  ctx.fillStyle = getCssVar("--snake");
-  for (const segment of state.snake) {
-    ctx.fillRect(segment.x * cellSize, segment.y * cellSize, cellSize, cellSize);
-  }
-
-  scoreEl.textContent = String(state.score);
-  highScoreEl.textContent = String(highScore);
-  pauseBtn.textContent = state.paused ? "Resume" : "Pause";
-
-  if (!state.started) {
-    statusEl.textContent = "Press Start to play.";
-  } else if (state.gameOver) {
-    statusEl.textContent = "Game over. Press Start / Restart.";
-  } else if (state.paused) {
-    statusEl.textContent = "Paused.";
-  } else {
-    statusEl.textContent = "Playing.";
-  }
-}
-
-function drawGrid() {
-  ctx.strokeStyle = "#eef1f4";
-  ctx.lineWidth = 1;
-
-  for (let i = 1; i < gridSize; i += 1) {
-    const p = i * cellSize;
-    ctx.beginPath();
-    ctx.moveTo(p, 0);
-    ctx.lineTo(p, board.height);
-    ctx.stroke();
-
-    ctx.beginPath();
-    ctx.moveTo(0, p);
-    ctx.lineTo(board.width, p);
-    ctx.stroke();
-  }
-}
-
-function gameLoop() {
-  state = tick(state);
-  if (state.score > highScore) {
-    highScore = state.score;
-  }
-  draw();
-}
-
-function restart() {
-  state = startGame(createInitialState(gridSize));
-  draw();
-}
-
-function handleDirection(direction) {
-  if (!DIRECTIONS[direction]) return;
-  state = applyDirection(state, direction);
-  draw();
-}
-
-startBtn.addEventListener("click", restart);
-pauseBtn.addEventListener("click", () => {
-  state = togglePause(state);
-  draw();
 });
 
 window.addEventListener("keydown", (event) => {
-  const key = event.key.length === 1 ? event.key.toLowerCase() : event.key;
+  if (!modal.classList.contains("open")) return;
 
-  if (key === " ") {
-    event.preventDefault();
-    state = togglePause(state);
-    draw();
-    return;
-  }
-
-  const direction = keyToDirection[key];
-  if (direction) {
-    event.preventDefault();
-    handleDirection(direction);
+  if (event.key === "Escape") {
+    closeModal();
+  } else if (event.key === "ArrowLeft") {
+    openAdjacent(-1);
+  } else if (event.key === "ArrowRight") {
+    openAdjacent(1);
   }
 });
 
-for (const button of touchButtons) {
-  button.addEventListener("click", () => {
-    handleDirection(button.dataset.dir);
-  });
-}
-
-setInterval(gameLoop, tickMs);
-draw();
-
-function getCssVar(name) {
-  return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
-}
+renderBooks();
