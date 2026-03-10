@@ -25,12 +25,9 @@ function renderBooks() {
     .map(
       (book, index) => `
         <button class="book-card" type="button" data-index="${index}" aria-label="Open ${book.title}">
-          <iframe
-            class="book-thumb"
-            src="${book.pdf}#page=1&zoom=page-fit"
-            title="${book.title} preview"
-            loading="lazy"
-          ></iframe>
+          <div class="book-thumb" aria-hidden="true">
+            <span class="thumb-label">${book.title}</span>
+          </div>
           <div class="book-meta">
             <p class="book-title">${book.title}</p>
             <p class="book-sub">Click to open reader</p>

@@ -66,10 +66,21 @@ body {
 .book-thumb {
   width: 100%;
   aspect-ratio: 16 / 9;
-  border: 0;
-  display: block;
-  background: #fff;
-  pointer-events: none;
+  display: grid;
+  place-items: center;
+  padding: 0.8rem;
+  background: linear-gradient(135deg, #76c7ad, #40916c);
+  color: #ffffff;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.thumb-label {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 
 .book-meta {
