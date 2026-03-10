@@ -1,13 +1,13 @@
 const books = [
-  { title: "Katya", pdf: "./books/book-1.pdf" },
-  { title: "Esther", pdf: "./books/book-2.pdf" },
-  { title: "Lola", pdf: "./books/book-3.pdf" },
-  { title: "Sarp", pdf: "./books/book-4.pdf" },
-  { title: "Picture Book 5", pdf: "./books/book-5.pdf" },
-  { title: "Picture Book 6", pdf: "./books/book-6.pdf" },
-  { title: "Picture Book 7", pdf: "./books/book-7.pdf" },
-  { title: "Picture Book 8", pdf: "./books/book-8.pdf" },
-  { title: "Picture Book 9", pdf: "./books/book-9.pdf" }
+  { title: "Katya", pdf: "./books/Book-1.pdf" },
+  { title: "Esther", pdf: "./books/Book-2.pdf" },
+  { title: "Lola", pdf: "./books/Book-3.pdf" },
+  { title: "Sarp", pdf: "./books/Book-4.pdf" },
+  { title: "Picture Book 5", pdf: "./books/Book-5.pdf" },
+  { title: "Picture Book 6", pdf: "./books/Book-6.pdf" },
+  { title: "Picture Book 7", pdf: "./books/Book-7.pdf" },
+  { title: "Picture Book 8", pdf: "./books/Book-8.pdf" },
+  { title: "Picture Book 9", pdf: "./books/Book-9.pdf" }
 ];
 
 const bookGrid = document.getElementById("bookGrid");
