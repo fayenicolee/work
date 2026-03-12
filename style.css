@@ -1,10 +1,10 @@
 @import url("https://fonts.googleapis.com/css2?family=Marcellus&family=Oi&display=swap");
 
 :root {
-  --bg: #b5e48c;
+  --bg: #ffffff;
   --ink: #ffffff;
-  --muted: #eef8e5;
-  --card: #52b69a;
+  --muted: #00a5e3;
+  --card: #cff800;
   --accent: #d15f3d;
   --accent-dark: #af4e31;
   --shadow: 0 16px 35px rgba(18, 56, 39, 0.25);
@@ -31,7 +31,7 @@ body {
 .hero h1 {
   margin: 0;
   font-size: clamp(1.8rem, 2.2vw, 2.6rem);
-  color: #1a759f;
+  color: #ff6088;
   font-family: "Oi", "Marcellus", serif !important;
   font-weight: 400;
   text-transform: uppercase;
@@ -40,7 +40,7 @@ body {
 
 .hero p {
   margin: 0.4rem 0 1.5rem;
-  color: var(--muted);
+  color: #00a5e3;
   font-size: 1.42rem;
 }
 
@@ -103,12 +103,13 @@ body {
   margin: 0;
   font-size: 1rem;
   font-weight: 700;
+  color: #000000;
 }
 
 .book-sub {
   margin: 0.3rem 0 0;
   font-size: 0.92rem;
-  color: var(--muted);
+  color: #000000;
 }
 
 .modal {
