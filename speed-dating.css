@@ -255,10 +255,11 @@ h2 {
 .question-overlay {
   position: absolute;
   inset: 50% auto auto 50%;
-  width: min(68%, 14ch);
+  width: min(86%, 22ch);
+  max-width: 900px;
   transform: translate(-50%, calc(-50% - 20px));
-  font-size: calc(clamp(2.8rem, 6vh, 4.6rem) + 20pt);
-  line-height: 0.92;
+  font-size: clamp(4rem, 8vh, 6rem);
+  line-height: 0.9;
   font-weight: 800;
   color: #1f0f18;
   text-align: center;
@@ -367,7 +368,7 @@ button {
   }
 
   .question-overlay {
-    width: 66%;
+    width: 82%;
     transform: translate(-50%, calc(-50% - 20px));
   }
 }
