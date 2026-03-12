@@ -246,13 +246,29 @@ async function pushToGoogleSheets(payload) {
   }
 
   if (isGoogleAppsScriptUrl(sheetEndpoint)) {
+    const body = JSON.stringify(payload);
+
+    if (navigator.sendBeacon) {
+      const queued = navigator.sendBeacon(
+        sheetEndpoint,
+        new Blob([body], { type: "text/plain;charset=utf-8" })
+      );
+
+      if (!queued) {
+        throw new Error("The browser could not queue the Google Sheets request.");
+      }
+
+      updateConnectionState("Connected");
+      return { ok: true, mode: "beacon" };
+    }
+
     await fetch(sheetEndpoint, {
       method: "POST",
       mode: "no-cors",
       headers: {
         "Content-Type": "text/plain;charset=utf-8"
       },
-      body: JSON.stringify(payload)
+      body
     });
 
     updateConnectionState("Connected");
