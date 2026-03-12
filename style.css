@@ -66,20 +66,19 @@ body {
 .book-thumb {
   position: relative;
   width: 100%;
-  aspect-ratio: 16 / 9;
   display: grid;
   place-items: center;
   padding: 0;
-  background: linear-gradient(135deg, #76c7ad, #40916c);
+  background: transparent;
   color: #ffffff;
   overflow: hidden;
 }
 
 .book-thumb-image {
   width: 100%;
-  height: 100%;
+  height: auto;
   display: block;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 .thumb-label {
@@ -95,6 +94,11 @@ body {
 
 .book-thumb.no-image .thumb-label {
   display: -webkit-box;
+}
+
+.book-thumb.no-image {
+  min-height: 180px;
+  background: linear-gradient(135deg, #76c7ad, #40916c);
 }
 
 .book-meta {
