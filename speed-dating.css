@@ -205,6 +205,7 @@ h2 {
   overflow: hidden;
   gap: 0.9rem;
   text-align: center;
+  transform: translateY(-10px);
 }
 
 .center-stage::before,
@@ -274,7 +275,7 @@ h2 {
 }
 
 .heart-label {
-  margin-top: 20px;
+  margin-top: 40px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
