@@ -97,6 +97,22 @@ const startOverButton = document.getElementById("startOverButton");
 let activeIndex = 0;
 let submissions = loadDrafts();
 
+function getSheetsConfigProblem() {
+  if (!sheetEndpoint) {
+    return null;
+  }
+
+  if (sheetEndpoint.includes("/a/macros/")) {
+    return "This Apps Script URL is domain-scoped. Use the public /macros/s/.../exec deployment URL instead.";
+  }
+
+  if (!sheetEndpoint.includes("/macros/s/") || !sheetEndpoint.endsWith("/exec")) {
+    return "This does not look like a valid Apps Script web app URL. Use the deployed /macros/s/.../exec URL.";
+  }
+
+  return null;
+}
+
 function loadDrafts() {
   try {
     const raw = localStorage.getItem(draftStorageKey);
@@ -223,6 +239,12 @@ async function pushToGoogleSheets(payload) {
     return { ok: true, mode: "draft" };
   }
 
+  const configProblem = getSheetsConfigProblem();
+  if (configProblem) {
+    updateConnectionState("Config issue");
+    throw new Error(configProblem);
+  }
+
   const response = await fetch(sheetEndpoint, {
     method: "POST",
     headers: {
@@ -292,7 +314,11 @@ ratingForm.addEventListener("submit", async (event) => {
     }
   } catch (error) {
     updateConnectionState("Connection failed");
-    window.alert(`Could not send rating to Google Sheets. ${error.message}`);
+    const networkHint =
+      error instanceof TypeError
+        ? "Google Apps Script often does this when the deployment is not public. Redeploy it as a Web app with access set to Anyone, then use the public /macros/s/.../exec URL."
+        : error.message;
+    window.alert(`Could not send rating to Google Sheets. ${networkHint}`);
   } finally {
     submitButton.disabled = false;
     submitButton.textContent = activeIndex === characters.length - 1 ? "Submit final rating" : "Save and next";
@@ -307,7 +333,7 @@ prevButton.addEventListener("click", () => {
 startOverButton.addEventListener("click", resetExperience);
 
 renderScales();
-updateConnectionState(sheetEndpoint ? "Ready to connect" : "Not connected yet");
+updateConnectionState(sheetEndpoint ? getSheetsConfigProblem() || "Ready to connect" : "Not connected yet");
 
 if (allCharactersRated()) {
   showSummary();
