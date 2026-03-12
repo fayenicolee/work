@@ -253,12 +253,47 @@ async function pushToGoogleSheets(payload) {
     body: JSON.stringify(payload)
   });
 
+  const responseText = await response.text();
+
   if (!response.ok) {
-    throw new Error(`Sheet request failed with status ${response.status}`);
+    throw new Error(parseSheetsError(response.status, responseText));
   }
 
   updateConnectionState("Connected");
-  return response.json().catch(() => ({ ok: true }));
+  try {
+    return responseText ? JSON.parse(responseText) : { ok: true };
+  } catch {
+    const interpretedError = parseSheetsHtmlError(responseText);
+    if (interpretedError) {
+      throw new Error(interpretedError);
+    }
+    return { ok: true };
+  }
+}
+
+function parseSheetsHtmlError(responseText) {
+  if (!responseText) {
+    return "";
+  }
+
+  if (responseText.includes("Script function not found: doPost")) {
+    return "Apps Script is deployed, but the deployed version does not include doPost(e). Save the script and redeploy the Web app.";
+  }
+
+  if (responseText.includes("ServiceLogin") || responseText.includes("Sign in")) {
+    return "This Apps Script deployment is still asking for sign-in. Redeploy it as a Web app with access set to Anyone.";
+  }
+
+  return "";
+}
+
+function parseSheetsError(status, responseText) {
+  const interpretedError = parseSheetsHtmlError(responseText);
+  if (interpretedError) {
+    return interpretedError;
+  }
+
+  return `Sheet request failed with status ${status}`;
 }
 
 function saveSubmission(payload) {
