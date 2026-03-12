@@ -257,7 +257,7 @@ h2 {
   inset: 50% auto auto 50%;
   width: min(68%, 14ch);
   transform: translate(-50%, calc(-50% - 20px));
-  font-size: clamp(2.8rem, 6vh, 4.6rem);
+  font-size: calc(clamp(2.8rem, 6vh, 4.6rem) + 20pt);
   line-height: 0.92;
   font-weight: 800;
   color: #1f0f18;
