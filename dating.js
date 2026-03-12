@@ -245,6 +245,20 @@ async function pushToGoogleSheets(payload) {
     throw new Error(configProblem);
   }
 
+  if (isGoogleAppsScriptUrl(sheetEndpoint)) {
+    await fetch(sheetEndpoint, {
+      method: "POST",
+      mode: "no-cors",
+      headers: {
+        "Content-Type": "text/plain;charset=utf-8"
+      },
+      body: JSON.stringify(payload)
+    });
+
+    updateConnectionState("Connected");
+    return { ok: true, mode: "no-cors" };
+  }
+
   const response = await fetch(sheetEndpoint, {
     method: "POST",
     headers: {
@@ -294,6 +308,10 @@ function parseSheetsError(status, responseText) {
   }
 
   return `Sheet request failed with status ${status}`;
+}
+
+function isGoogleAppsScriptUrl(url) {
+  return /^https:\/\/script\.google\.com\/macros\/s\//.test(url);
 }
 
 function saveSubmission(payload) {
