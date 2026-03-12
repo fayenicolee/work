@@ -48,7 +48,7 @@ body {
 .book-card {
   border: 0;
   border-radius: 14px;
-  overflow: hidden;
+  overflow: visible;
   background: var(--card);
   box-shadow: var(--shadow);
   cursor: pointer;
@@ -66,19 +66,19 @@ body {
 .book-thumb {
   position: relative;
   width: 100%;
-  display: grid;
-  place-items: center;
-  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.35rem;
   background: transparent;
   color: #ffffff;
-  overflow: hidden;
 }
 
 .book-thumb-image {
-  width: 100%;
+  max-width: 100%;
+  width: auto;
   height: auto;
   display: block;
-  object-fit: contain;
 }
 
 .thumb-label {
