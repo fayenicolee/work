@@ -24,9 +24,10 @@ body {
   font-family: "Nunito", sans-serif;
   color: var(--ink);
   background:
-    radial-gradient(circle at 12% 10%, rgba(255, 214, 231, 0.95), transparent 25%),
-    radial-gradient(circle at 90% 14%, rgba(255, 141, 182, 0.45), transparent 20%),
-    linear-gradient(180deg, #fffafc 0%, var(--bg) 55%, #ffeef5 100%);
+    linear-gradient(rgba(255, 243, 248, 0.72), rgba(255, 243, 248, 0.72)),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='320' viewBox='0 0 320 320'%3E%3Crect width='320' height='320' fill='%23ead6e2'/%3E%3Cg stroke='%235c3245' stroke-width='2.2' stroke-linejoin='round' stroke-linecap='round'%3E%3Cg transform='translate(28 26) rotate(-12)'%3E%3Cpath d='M8 84V16c0-7 6-12 13-11l43 7c5 1 9 5 9 10v66L30 80c-8-1-15 2-22 4Z' fill='%23ff829f'/%3E%3Cpath d='M73 88V20c0-5 4-9 9-10l43-7c7-1 13 4 13 11v68c-7-2-14-5-22-4l-43 10Z' fill='%23ff9bb0'/%3E%3Cpath d='M73 20 66 22v66l7 0Z' fill='%23f06c8d'/%3E%3Cpath d='M82 26 118 20' fill='none'/%3E%3Cpath d='M82 34 118 28' fill='none'/%3E%3Cpath d='M84 43 120 37' fill='none'/%3E%3Cpath d='M22 24 55 29' fill='none'/%3E%3Cpath d='M22 34 55 39' fill='none'/%3E%3Cpath d='M22 44 55 49' fill='none'/%3E%3Crect x='39' y='45' width='23' height='8' rx='2' fill='%23492a37'/%3E%3C/g%3E%3Cg transform='translate(208 22) rotate(10)'%3E%3Crect x='0' y='0' width='50' height='69' rx='6' fill='%23b96cb0'/%3E%3Cpath d='M8 14h22M8 24h30' fill='none'/%3E%3Cpath d='M36 69q4-6 14-9' fill='none'/%3E%3C/g%3E%3Cg transform='translate(180 118) rotate(-14)'%3E%3Cpath d='M8 84V16c0-7 6-12 13-11l43 7c5 1 9 5 9 10v66L30 80c-8-1-15 2-22 4Z' fill='%23ff8ca8'/%3E%3Cpath d='M73 88V20c0-5 4-9 9-10l43-7c7-1 13 4 13 11v68c-7-2-14-5-22-4l-43 10Z' fill='%23ff9ab3'/%3E%3Cpath d='M73 20 66 22v66l7 0Z' fill='%23ef7394'/%3E%3Cpath d='M82 26 118 20' fill='none'/%3E%3Cpath d='M82 34 118 28' fill='none'/%3E%3Cpath d='M84 43 120 37' fill='none'/%3E%3Cpath d='M22 24 55 29' fill='none'/%3E%3Cpath d='M22 34 55 39' fill='none'/%3E%3Cpath d='M22 44 55 49' fill='none'/%3E%3Crect x='38' y='45' width='24' height='8' rx='2' fill='%23492a37'/%3E%3C/g%3E%3Cg transform='translate(18 194) rotate(9)'%3E%3Cpath d='M8 84V16c0-7 6-12 13-11l43 7c5 1 9 5 9 10v66L30 80c-8-1-15 2-22 4Z' fill='%23ff8ca8'/%3E%3Cpath d='M73 88V20c0-5 4-9 9-10l43-7c7-1 13 4 13 11v68c-7-2-14-5-22-4l-43 10Z' fill='%23ffa0b5'/%3E%3Cpath d='M73 20 66 22v66l7 0Z' fill='%23ef7394'/%3E%3Cpath d='M82 26 118 20' fill='none'/%3E%3Cpath d='M82 34 118 28' fill='none'/%3E%3Cpath d='M84 43 120 37' fill='none'/%3E%3Cpath d='M22 24 55 29' fill='none'/%3E%3Cpath d='M22 34 55 39' fill='none'/%3E%3Cpath d='M22 44 55 49' fill='none'/%3E%3Crect x='40' y='46' width='21' height='7' rx='2' fill='%23492a37'/%3E%3C/g%3E%3Cg transform='translate(112 238) rotate(-8)'%3E%3Crect x='0' y='0' width='52' height='72' rx='6' fill='%23ba6cb1'/%3E%3Cpath d='M10 16h22M10 26h30' fill='none'/%3E%3Cpath d='M38 72q4-7 14-10' fill='none'/%3E%3C/g%3E%3Cg transform='translate(250 228) rotate(16)'%3E%3Cpath d='M8 62V12c0-5 5-9 10-8l31 5c4 1 7 4 7 8v50L24 61c-6-1-11 1-16 3Z' fill='%23ff8aa6'/%3E%3Cpath d='M56 67V16c0-4 3-7 7-8l31-5c5-1 10 3 10 8v51c-5-2-10-4-16-3l-32 8Z' fill='%23ff9ab3'/%3E%3Cpath d='M56 16 50 18v49l6 0Z' fill='%23f06f91'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  background-size: auto, 320px 320px;
+  background-repeat: repeat, repeat;
 }
 
 body::before,
@@ -73,6 +74,7 @@ body::after {
 .hero-card {
   padding: 1.2rem 1.5rem;
   overflow: hidden;
+  text-align: center;
 }
 
 .hero-card::after {
@@ -102,7 +104,7 @@ h2 {
 
 h1 {
   font-family: "Corinthia", cursive;
-  font-size: clamp(3.4rem, 7vh, 5.8rem);
+  font-size: clamp(4.4rem, 9vh, 7.4rem);
   font-weight: 700;
 }
 
@@ -130,11 +132,12 @@ h2 {
 
 .center-stage {
   width: min(100%, 760px);
-  padding: 1.15rem 1.25rem 1.35rem;
+  min-height: min(68vh, 720px);
+  padding: 1.35rem 1.35rem 1.7rem;
   display: grid;
   place-items: center;
   overflow: hidden;
-  gap: 0.7rem;
+  gap: 0.9rem;
   text-align: center;
 }
 
@@ -166,7 +169,7 @@ h2 {
   color: var(--pink-deep);
   transition: transform 180ms ease;
   position: relative;
-  width: min(100%, 640px);
+  width: min(100%, 720px);
 }
 
 .giant-heart:hover,
@@ -175,7 +178,7 @@ h2 {
 }
 
 .heart-face {
-  font-size: clamp(8.5rem, 24vh, 13rem);
+  font-size: clamp(10rem, 28vh, 15.5rem);
   line-height: 0.8;
   color: #ff6fa4;
   text-shadow:
@@ -186,18 +189,19 @@ h2 {
 .question-overlay {
   position: absolute;
   inset: 50% auto auto 50%;
-  width: min(62%, 20ch);
-  transform: translate(-50%, -58%);
-  font-size: clamp(1.25rem, 2.6vh, 2rem);
-  line-height: 1.08;
+  width: min(66%, 17ch);
+  transform: translate(-50%, calc(-50% - 20px));
+  font-size: clamp(1.95rem, 4.2vh, 3rem);
+  line-height: 1;
   font-weight: 800;
-  color: #ffffff;
+  color: #1f0f18;
   text-align: center;
   text-wrap: balance;
   text-shadow:
-    0 3px 12px rgba(126, 25, 62, 0.36),
-    0 1px 0 rgba(126, 25, 62, 0.28);
+    0 2px 10px rgba(255, 255, 255, 0.3);
   pointer-events: none;
+  display: grid;
+  place-items: center;
 }
 
 .heart-label {
@@ -218,7 +222,7 @@ h2 {
   width: min(100%, 420px);
   border: 1px solid var(--line);
   border-radius: 28px;
-  padding: 0.75rem 1rem;
+  padding: 0.9rem 1rem;
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(255, 214, 231, 0.86));
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
   color: var(--ink);
@@ -277,6 +281,6 @@ button {
 
   .question-overlay {
     width: 66%;
-    transform: translate(-50%, -60%);
+    transform: translate(-50%, calc(-50% - 20px));
   }
 }
