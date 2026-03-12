@@ -32,7 +32,10 @@ body {
   margin: 0;
   font-size: clamp(1.8rem, 2.2vw, 2.6rem);
   color: #1a759f;
-  font-family: "Oi", serif;
+  font-family: "Oi", "Marcellus", serif !important;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
 }
 
 .hero p {
