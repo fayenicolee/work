@@ -261,7 +261,7 @@ h2 {
   width: min(86%, 22ch);
   max-width: 900px;
   transform: translate(-50%, calc(-50% - 20px));
-  font-size: calc(clamp(4rem, 8vh, 6rem) - 15pt);
+  font-size: calc(clamp(4rem, 8vh, 6rem) - 5pt);
   line-height: 0.9;
   font-weight: 800;
   color: #1f0f18;

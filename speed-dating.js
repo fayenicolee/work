@@ -102,27 +102,27 @@ function playTimerEndSound() {
   }
 
   const now = context.currentTime;
-  const notes = [
-    { frequency: 880, start: now, duration: 0.16 },
-    { frequency: 1174.66, start: now + 0.18, duration: 0.18 },
-    { frequency: 1567.98, start: now + 0.4, duration: 0.42 }
+  const partials = [
+    { frequency: 1760, gain: 0.1, duration: 2.4 },
+    { frequency: 2350, gain: 0.065, duration: 1.9 },
+    { frequency: 2980, gain: 0.04, duration: 1.45 }
   ];
 
-  notes.forEach((note) => {
+  partials.forEach((partial) => {
     const oscillator = context.createOscillator();
     const gainNode = context.createGain();
 
-    oscillator.type = "sine";
-    oscillator.frequency.setValueAtTime(note.frequency, note.start);
+    oscillator.type = "triangle";
+    oscillator.frequency.setValueAtTime(partial.frequency, now);
 
-    gainNode.gain.setValueAtTime(0.0001, note.start);
-    gainNode.gain.exponentialRampToValueAtTime(0.18, note.start + 0.02);
-    gainNode.gain.exponentialRampToValueAtTime(0.0001, note.start + note.duration);
+    gainNode.gain.setValueAtTime(0.0001, now);
+    gainNode.gain.exponentialRampToValueAtTime(partial.gain, now + 0.012);
+    gainNode.gain.exponentialRampToValueAtTime(0.0001, now + partial.duration);
 
     oscillator.connect(gainNode);
     gainNode.connect(context.destination);
-    oscillator.start(note.start);
-    oscillator.stop(note.start + note.duration);
+    oscillator.start(now);
+    oscillator.stop(now + partial.duration);
   });
 }
 
