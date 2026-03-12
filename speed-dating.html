@@ -9,20 +9,16 @@
   <body>
     <main class="page-shell">
       <section class="hero-card">
-        <p class="eyebrow">School Reading Event</p>
         <h1>Book Character Speed Dating</h1>
-        <p class="lede">
-          Tap the heart for a random prompt, then tap the timer to run each two-minute round.
-        </p>
       </section>
 
       <section class="question-stage">
         <div class="center-stage">
           <p class="question-tag">Tonight's prompt</p>
-          <h2 id="questionText">Tap the heart to reveal a book question.</h2>
 
           <button id="questionButton" class="giant-heart" type="button" aria-describedby="questionText">
             <span class="heart-face">♥</span>
+            <span id="questionText" class="question-overlay">Tap the heart to reveal a book question.</span>
             <span class="heart-label">New Question</span>
           </button>
 

@@ -165,6 +165,8 @@ h2 {
   gap: 0.35rem;
   color: var(--pink-deep);
   transition: transform 180ms ease;
+  position: relative;
+  width: min(100%, 640px);
 }
 
 .giant-heart:hover,
@@ -179,6 +181,23 @@ h2 {
   text-shadow:
     0 18px 36px rgba(227, 71, 134, 0.22),
     0 0 0 #fff;
+}
+
+.question-overlay {
+  position: absolute;
+  inset: 50% auto auto 50%;
+  width: min(62%, 20ch);
+  transform: translate(-50%, -58%);
+  font-size: clamp(1.25rem, 2.6vh, 2rem);
+  line-height: 1.08;
+  font-weight: 800;
+  color: #ffffff;
+  text-align: center;
+  text-wrap: balance;
+  text-shadow:
+    0 3px 12px rgba(126, 25, 62, 0.36),
+    0 1px 0 rgba(126, 25, 62, 0.28);
+  pointer-events: none;
 }
 
 .heart-label {
@@ -254,5 +273,10 @@ button {
   .center-stage {
     border-radius: 28px;
     padding: 1rem;
+  }
+
+  .question-overlay {
+    width: 66%;
+    transform: translate(-50%, -60%);
   }
 }
