@@ -133,7 +133,7 @@ function finishTimer() {
   timerButton.classList.remove("is-running");
   timerButton.classList.add("is-finished");
   timerButton.querySelector(".timer-label").textContent = "Tap to reset";
-  timerText.textContent = "Time's Up! Move to the next table.";
+  timerText.textContent = "Time's Up!";
   playTimerEndSound();
 }
 
