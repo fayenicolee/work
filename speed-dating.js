@@ -42,6 +42,7 @@ const roundDurationMs = 2 * 60 * 1000;
 let timerState = "idle";
 let timerIntervalId = null;
 let roundEndsAt = 0;
+let audioContext = null;
 
 function pickRandomQuestion() {
   if (questions.length === 1) {
@@ -77,6 +78,54 @@ function renderTimerIdle() {
   timerText.textContent = "02:00";
 }
 
+function getAudioContext() {
+  if (!window.AudioContext && !window.webkitAudioContext) {
+    return null;
+  }
+
+  if (!audioContext) {
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    audioContext = new AudioContextClass();
+  }
+
+  return audioContext;
+}
+
+function playTimerEndSound() {
+  const context = getAudioContext();
+  if (!context) {
+    return;
+  }
+
+  if (context.state === "suspended") {
+    context.resume().catch(() => {});
+  }
+
+  const now = context.currentTime;
+  const notes = [
+    { frequency: 880, start: now, duration: 0.16 },
+    { frequency: 1174.66, start: now + 0.18, duration: 0.18 },
+    { frequency: 1567.98, start: now + 0.4, duration: 0.42 }
+  ];
+
+  notes.forEach((note) => {
+    const oscillator = context.createOscillator();
+    const gainNode = context.createGain();
+
+    oscillator.type = "sine";
+    oscillator.frequency.setValueAtTime(note.frequency, note.start);
+
+    gainNode.gain.setValueAtTime(0.0001, note.start);
+    gainNode.gain.exponentialRampToValueAtTime(0.18, note.start + 0.02);
+    gainNode.gain.exponentialRampToValueAtTime(0.0001, note.start + note.duration);
+
+    oscillator.connect(gainNode);
+    gainNode.connect(context.destination);
+    oscillator.start(note.start);
+    oscillator.stop(note.start + note.duration);
+  });
+}
+
 function finishTimer() {
   window.clearInterval(timerIntervalId);
   timerIntervalId = null;
@@ -85,6 +134,7 @@ function finishTimer() {
   timerButton.classList.add("is-finished");
   timerButton.querySelector(".timer-label").textContent = "Tap to reset";
   timerText.textContent = "Time's Up! Move to the next table.";
+  playTimerEndSound();
 }
 
 function tickTimer() {
