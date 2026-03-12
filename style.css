@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Marcellus&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Marcellus&family=Oi&display=swap");
 
 :root {
   --bg: #b5e48c;
@@ -32,11 +32,13 @@ body {
   margin: 0;
   font-size: clamp(1.8rem, 2.2vw, 2.6rem);
   color: #1a759f;
+  font-family: "Oi", serif;
 }
 
 .hero p {
   margin: 0.4rem 0 1.5rem;
   color: var(--muted);
+  font-size: 1.42rem;
 }
 
 .book-grid {
@@ -47,7 +49,7 @@ body {
 
 .book-card {
   border: 0;
-  border-radius: 14px;
+  border-radius: 0;
   overflow: visible;
   background: var(--card);
   box-shadow: var(--shadow);
@@ -83,17 +85,6 @@ body {
 
 .thumb-label {
   display: none;
-  padding: 0.8rem;
-  text-align: center;
-  font-size: 1rem;
-  font-weight: 700;
-  overflow: hidden;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-}
-
-.book-thumb.no-image .thumb-label {
-  display: -webkit-box;
 }
 
 .book-thumb.no-image {
@@ -138,7 +129,7 @@ body {
   width: min(96vw, 1400px);
   height: min(94vh, 1000px);
   background: #2d6a4f;
-  border-radius: 14px;
+  border-radius: 0;
   padding: 0.8rem;
   display: grid;
   grid-template-rows: auto auto 1fr;
@@ -161,7 +152,7 @@ body {
 
 .icon-btn {
   border: 0;
-  border-radius: 10px;
+  border-radius: 0;
   padding: 0.55rem 0.8rem;
   background: var(--accent);
   color: #fff;
@@ -180,7 +171,7 @@ body {
 
 .reader-wrap {
   border: 1px solid #d8dee5;
-  border-radius: 10px;
+  border-radius: 0;
   overflow: hidden;
   min-height: 0;
   background: #fff;

@@ -27,7 +27,6 @@ function renderBooks() {
         <button class="book-card" type="button" data-index="${index}" aria-label="Open ${book.title}">
           <div class="book-thumb no-image" aria-hidden="true">
             <img class="book-thumb-image" src="${book.thumb}" alt="" loading="lazy" />
-            <span class="thumb-label">${book.title}</span>
           </div>
           <div class="book-meta">
             <p class="book-title">${book.title}</p>
