@@ -141,6 +141,7 @@ body::after {
   padding: 1.2rem 1.5rem;
   overflow: hidden;
   text-align: center;
+  transform: translateY(15px);
 }
 
 .hero-card::after {
