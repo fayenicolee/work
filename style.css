@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Marcellus&family=Oi&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Oi&display=swap");
 
 :root {
   --bg: #ffffff;
@@ -18,7 +18,7 @@ body {
   margin: 0;
   min-height: 100vh;
   color: var(--ink);
-  font-family: "Marcellus", serif;
+  font-family: serif;
   background: var(--bg);
 }
 
@@ -32,7 +32,7 @@ body {
   margin: 0;
   font-size: clamp(1.8rem, 2.2vw, 2.6rem);
   color: #ff6088;
-  font-family: "Oi", "Marcellus", serif !important;
+  font-family: "Oi", cursive !important;
   font-weight: 400;
   text-transform: uppercase;
   letter-spacing: 0.03em;
