@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Book Character Speed Dating</title>
+    <link rel="stylesheet" href="./dating.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="intro-card">
+        <p class="eyebrow">Story crush census</p>
+        <h1>Book Character Speed Dating</h1>
+        <p class="lede">
+          Tap red hearts to rate each character, then send the results to your Google Sheet.
+        </p>
+
+        <form class="participant-card" id="participantForm">
+          <label class="field">
+            <span>Your name</span>
+            <input id="participantName" name="participantName" type="text" maxlength="80" placeholder="Taylor" required />
+          </label>
+
+          <label class="field">
+            <span>Group or table</span>
+            <input id="participantGroup" name="participantGroup" type="text" maxlength="80" placeholder="Team Fantasy" />
+          </label>
+        </form>
+
+        <div class="intro-meta">
+          <div>
+            <strong id="progressCount">1 / 9</strong>
+            <span>characters rated</span>
+          </div>
+          <div>
+            <strong>Google Sheets</strong>
+            <span id="sheetStatus">Not connected yet</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="dating-stage" aria-labelledby="characterName">
+        <article class="character-card" id="characterCard">
+          <div class="character-art-wrap">
+            <img id="characterArt" class="character-art" src="" alt="" />
+          </div>
+
+          <div class="character-copy">
+            <p class="character-number" id="characterNumber">Character 1</p>
+            <h2 id="characterName">Character name</h2>
+            <p id="characterTagline" class="character-tagline"></p>
+            <p id="characterPrompt" class="character-prompt"></p>
+          </div>
+        </article>
+
+        <form id="ratingForm" class="rating-card">
+          <div class="scale-grid" id="scaleGrid"></div>
+
+          <label class="field">
+            <span>Notes</span>
+            <textarea
+              id="notes"
+              name="notes"
+              rows="4"
+              maxlength="280"
+              placeholder="Chaotic in a lovable way. Might own too many secrets."
+            ></textarea>
+          </label>
+
+          <div class="form-actions">
+            <button id="prevButton" class="secondary-btn" type="button">Previous</button>
+            <button id="submitButton" class="primary-btn" type="submit">Save and next</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="summary-card" id="summaryCard" hidden>
+        <p class="eyebrow">All done</p>
+        <h2>Ratings submitted</h2>
+        <p id="summaryText"></p>
+        <button id="startOverButton" class="primary-btn" type="button">Rate again</button>
+      </section>
+    </main>
+
+    <script src="./config.js"></script>
+    <script src="./dating.js"></script>
+  </body>
+</html>
