@@ -1,13 +1,13 @@
 const books = [
-  { title: "Katya", pdf: "./books/Book-1.pdf" },
-  { title: "Esther", pdf: "./books/Book-2.pdf" },
-  { title: "Lola", pdf: "./books/Book-3.pdf" },
-  { title: "Sarp", pdf: "./books/Book-4.pdf" },
-  { title: "Picture Book 5", pdf: "./books/Book-5.pdf" },
-  { title: "Picture Book 6", pdf: "./books/Book-6.pdf" },
-  { title: "Picture Book 7", pdf: "./books/Book-7.pdf" },
-  { title: "Picture Book 8", pdf: "./books/Book-8.pdf" },
-  { title: "Picture Book 9", pdf: "./books/Book-9.pdf" }
+  { title: "Katya", pdf: "./books/Book-1.pdf", thumb: "./books/Book-1.png" },
+  { title: "Esther", pdf: "./books/Book-2.pdf", thumb: "./books/Book-2.png" },
+  { title: "Lola", pdf: "./books/Book-3.pdf", thumb: "./books/Book-3.png" },
+  { title: "Sarp", pdf: "./books/Book-4.pdf", thumb: "./books/Book-4.png" },
+  { title: "Picture Book 5", pdf: "./books/Book-5.pdf", thumb: "./books/Book-5.png" },
+  { title: "Picture Book 6", pdf: "./books/Book-6.pdf", thumb: "./books/Book-6.png" },
+  { title: "Picture Book 7", pdf: "./books/Book-7.pdf", thumb: "./books/Book-7.png" },
+  { title: "Picture Book 8", pdf: "./books/Book-8.pdf", thumb: "./books/Book-8.png" },
+  { title: "Picture Book 9", pdf: "./books/Book-9.pdf", thumb: "./books/Book-9.png" }
 ];
 
 const bookGrid = document.getElementById("bookGrid");
@@ -25,7 +25,8 @@ function renderBooks() {
     .map(
       (book, index) => `
         <button class="book-card" type="button" data-index="${index}" aria-label="Open ${book.title}">
-          <div class="book-thumb" aria-hidden="true">
+          <div class="book-thumb no-image" aria-hidden="true">
+            <img class="book-thumb-image" src="${book.thumb}" alt="" loading="lazy" />
             <span class="thumb-label">${book.title}</span>
           </div>
           <div class="book-meta">
@@ -38,6 +39,35 @@ function renderBooks() {
     .join("");
 
   bookGrid.innerHTML = cards;
+  wireThumbnailFallbacks();
+}
+
+function wireThumbnailFallbacks() {
+  const thumbs = bookGrid.querySelectorAll(".book-thumb-image");
+  thumbs.forEach((image) => {
+    const parent = image.closest(".book-thumb");
+
+    const applyLoadedState = () => {
+      parent.classList.remove("no-image");
+      image.hidden = false;
+    };
+
+    const applyFallbackState = () => {
+      parent.classList.add("no-image");
+      image.hidden = true;
+    };
+
+    image.addEventListener("load", applyLoadedState);
+    image.addEventListener("error", applyFallbackState);
+
+    if (image.complete) {
+      if (image.naturalWidth > 0) {
+        applyLoadedState();
+      } else {
+        applyFallbackState();
+      }
+    }
+  });
 }
 
 function openBook(index) {

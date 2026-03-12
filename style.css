@@ -64,23 +64,37 @@ body {
 }
 
 .book-thumb {
+  position: relative;
   width: 100%;
   aspect-ratio: 16 / 9;
   display: grid;
   place-items: center;
-  padding: 0.8rem;
+  padding: 0;
   background: linear-gradient(135deg, #76c7ad, #40916c);
   color: #ffffff;
-  text-align: center;
-  font-size: 1rem;
-  font-weight: 700;
+  overflow: hidden;
+}
+
+.book-thumb-image {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
 }
 
 .thumb-label {
-  display: -webkit-box;
+  display: none;
+  padding: 0.8rem;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 700;
   overflow: hidden;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
+}
+
+.book-thumb.no-image .thumb-label {
+  display: -webkit-box;
 }
 
 .book-meta {
