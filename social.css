@@ -168,11 +168,6 @@ h1 {
   font-weight: 800;
 }
 
-.field-hint {
-  color: var(--muted);
-  line-height: 1.4;
-}
-
 .field input,
 .field select,
 .field textarea {

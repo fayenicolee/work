@@ -3,7 +3,6 @@ const childNameInput = document.getElementById("childName");
 const childGenderInput = document.getElementById("childGender");
 const childInterestsInput = document.getElementById("childInterests");
 const storyProblemInput = document.getElementById("storyProblem");
-const apiKeyInput = document.getElementById("apiKey");
 const storyTitle = document.getElementById("storyTitle");
 const storySummary = document.getElementById("storySummary");
 const comicGrid = document.getElementById("comicGrid");
@@ -11,7 +10,6 @@ const printButton = document.getElementById("printButton");
 const statusCopy = document.getElementById("statusCopy");
 
 const appConfig = window.APP_CONFIG || {};
-const localStorageKey = "social-story-studio-openai-key";
 
 const defaults = {
   childName: "Maya",
@@ -121,28 +119,6 @@ function setStatus(message, tone = "") {
   }
 }
 
-function getStoredApiKey() {
-  try {
-    return localStorage.getItem(localStorageKey) || "";
-  } catch {
-    return "";
-  }
-}
-
-function persistApiKey(value) {
-  try {
-    if (value) {
-      localStorage.setItem(localStorageKey, value);
-    }
-  } catch {
-    return;
-  }
-}
-
-function getApiKey() {
-  return apiKeyInput.value.trim() || (appConfig.openAIApiKey || "").trim();
-}
-
 function describeCharacter(seed, gender) {
   const hairStyles = ["curly hair", "short hair", "wavy hair", "a neat bob haircut", "a shaggy haircut"];
   const outfits = ["a bright red hoodie", "a blue superhero shirt", "a green jumper", "a striped t-shirt", "orange overalls"];
@@ -209,163 +185,24 @@ function parseStoryJson(rawText) {
   }
 }
 
-async function generatePanelsWithChatGPT(model) {
-  const apiKey = getApiKey();
-
-  if (!apiKey) {
-    throw new Error("Add an OpenAI API key in the form or in config.js.");
-  }
-
-  persistApiKey(apiKeyInput.value.trim());
-
-  const prompt = [
-    "You are writing a social story for a child as a comic strip.",
-    "Return valid JSON only.",
-    'Use this shape: {"title":"...","summary":"...","panels":[{"title":"...","text":"...","speech":"..."}]}',
-    "Requirements:",
-    "- exactly 6 panels",
-    "- simple language for children",
-    "- engaging, descriptive, and gently funny",
-    "- emotionally safe and supportive",
-    "- never shame the child",
-    "- keep each panel text to 1-2 short sentences",
-    "- keep each speech bubble to 2-6 words",
-    "- include the child's interests naturally",
-    "- end with success, reassurance, and practice",
-    `Child name: ${model.childName}`,
-    `Gender: ${model.childGender}`,
-    `Interests: ${model.interests.join(", ")}`,
-    `Problem or event: ${model.problem}`
-  ].join("\n");
-
-  const response = await fetch("https://api.openai.com/v1/responses", {
+async function generateSocialStory(model) {
+  const response = await fetch(appConfig.socialStoryEndpoint || "/api/social-story", {
     method: "POST",
     headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${apiKey}`
+      "Content-Type": "application/json"
     },
-    body: JSON.stringify({
-      model: appConfig.openAIModel || "gpt-4.1-mini",
-      input: prompt
-    })
+    body: JSON.stringify(model)
   });
 
-  if (!response.ok) {
-    const errorBody = await response.text();
-    throw new Error(`OpenAI request failed (${response.status}): ${errorBody}`);
-  }
-
   const data = await response.json();
-  const outputText = data.output_text || "";
-
-  if (!outputText) {
-    throw new Error("OpenAI returned no text.");
-  }
-
-  const parsed = parseStoryJson(outputText);
-
-  if (!parsed || !Array.isArray(parsed.panels) || parsed.panels.length !== 6) {
-    throw new Error("OpenAI returned a story, but not in the expected 6-panel format.");
-  }
-
-  return parsed;
-}
-
-function buildPanelImagePrompt(model, panel, panelIndex) {
-  const seed = hashValue(model.childName + model.interests.join("-"));
-  const characterDescription = describeCharacter(seed, model.childGender);
-  const interestDetail = model.interests.length ? model.interests.join(", ") : "favorite things";
-
-  return [
-    "Create a single comic-book panel illustration for a teacher social story.",
-    "Style: funny, warm, child-friendly, colorful comic art, clean outlines, expressive faces, classroom-friendly, no text in the image.",
-    "Keep the same child character design across panels.",
-    `Main character: ${model.childName}, ${characterDescription}.`,
-    `The child likes: ${interestDetail}.`,
-    `Panel number: ${panelIndex + 1}.`,
-    `Panel title: ${panel.title}.`,
-    `Panel narration: ${panel.text}.`,
-    `Speech bubble meaning: ${panel.speech}.`,
-    `Overall story situation: ${model.problem}.`,
-    "Show the scene clearly and simply so a child can understand it at a glance.",
-    "Make it visually descriptive, a little funny, and emotionally safe."
-  ].join(" ");
-}
-
-async function generatePanelImage(model, panel, panelIndex) {
-  const apiKey = getApiKey();
-  const response = await fetch("https://api.openai.com/v1/images/generations", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${apiKey}`
-    },
-    body: JSON.stringify({
-      model: appConfig.openAIImageModel || "gpt-image-1",
-      prompt: buildPanelImagePrompt(model, panel, panelIndex),
-      size: "1024x1024"
-    })
-  });
 
   if (!response.ok) {
-    const errorBody = await response.text();
-    throw new Error(`Image request failed (${response.status}): ${errorBody}`);
+    const error = new Error(data.error || "The social story request failed.");
+    error.fallback = data.fallback;
+    throw error;
   }
 
-  const data = await response.json();
-  const image = data?.data?.[0];
-
-  if (image?.b64_json) {
-    return `data:image/png;base64,${image.b64_json}`;
-  }
-
-  if (image?.url) {
-    return image.url;
-  }
-
-  throw new Error("OpenAI returned no image.");
-}
-
-async function hydratePanelImages(model, panels) {
-  let failureCount = 0;
-
-  for (const [index, panel] of panels.entries()) {
-    const panelNode = comicGrid.querySelector(`[data-panel-index="${index}"]`);
-
-    if (!panelNode) {
-      continue;
-    }
-
-    const loadingNode = panelNode.querySelector(".panel-loading");
-    const imageNode = panelNode.querySelector(".panel-ai-image");
-    const fallbackNode = panelNode.querySelector(".panel-art-fallback");
-
-    try {
-      setStatus(`Generating image ${index + 1} of ${panels.length} with ChatGPT...`, "loading");
-      const imageUrl = await generatePanelImage(model, panel, index);
-      imageNode.src = imageUrl;
-      imageNode.alt = `${panel.title} illustration`;
-      imageNode.hidden = false;
-      fallbackNode.hidden = true;
-    } catch (error) {
-      failureCount += 1;
-      imageNode.hidden = true;
-      fallbackNode.hidden = false;
-      setStatus(error.message, "error");
-    } finally {
-      loadingNode.hidden = true;
-    }
-  }
-
-  if (failureCount > 0) {
-    setStatus(
-      `Story generated with ChatGPT. ${failureCount} panel image${failureCount === 1 ? "" : "s"} used fallback art.`,
-      "error"
-    );
-    return;
-  }
-
-  setStatus("Story and images generated with ChatGPT.");
+  return data;
 }
 
 function createPanelArt({ panel, panelIndex, childName, interests }) {
@@ -423,7 +260,9 @@ function renderPanels(model, storyData, options = {}) {
         <article class="comic-panel" data-panel-index="${index}">
           <div class="panel-art panel-art-media">
             <div class="panel-loading"${showImageLoading ? "" : " hidden"}>Drawing panel ${index + 1}...</div>
-            <img class="panel-ai-image" src="" alt="" hidden />
+            <img class="panel-ai-image" src="${escapeHtml(panel.imageUrl || "")}" alt="${escapeHtml(panel.title)} illustration"${
+              panel.imageUrl ? "" : " hidden"
+            } />
             <div class="panel-art-fallback">${createPanelArt({
               panel,
               panelIndex: index,
@@ -456,7 +295,6 @@ function applyDefaults() {
   childGenderInput.value = defaults.childGender;
   childInterestsInput.value = defaults.childInterests;
   storyProblemInput.value = defaults.storyProblem;
-  apiKeyInput.value = getStoredApiKey();
 }
 
 function renderEmptyState() {
@@ -479,15 +317,28 @@ storyForm.addEventListener("submit", async (event) => {
   setStatus("Generating story with ChatGPT...", "loading");
 
   try {
-    const storyData = await generatePanelsWithChatGPT(model);
-    renderPanels(model, storyData, { showImageLoading: true });
-    await hydratePanelImages(model, storyData.panels);
+    const storyData = await generateSocialStory(model);
+    renderPanels(model, storyData, { showImageLoading: false });
+    if (storyData.imageFailures > 0) {
+      setStatus(
+        `Story generated with ChatGPT. ${storyData.imageFailures} panel image${
+          storyData.imageFailures === 1 ? "" : "s"
+        } used fallback art.`,
+        "error"
+      );
+    } else {
+      setStatus("Story and images generated with ChatGPT.");
+    }
   } catch (error) {
-    renderPanels(model, {
-      title: `${model.childName}'s social story`,
-      summary: `Fallback story shown because ChatGPT was unavailable. ${model.problem}`,
-      panels: createFallbackPanels(model)
-    }, { showImageLoading: false });
+    renderPanels(
+      model,
+      error.fallback || {
+        title: `${model.childName}'s social story`,
+        summary: `Fallback story shown because ChatGPT was unavailable. ${model.problem}`,
+        panels: createFallbackPanels(model)
+      },
+      { showImageLoading: false }
+    );
     setStatus(error.message, "error");
   }
 });
