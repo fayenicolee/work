@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Social Story Studio</title>
+    <link rel="stylesheet" href="./social.css" />
+  </head>
+  <body>
+    <main class="page-shell">
+      <section class="hero-card">
+        <div class="hero-copy">
+          <p class="eyebrow">Teacher tool</p>
+          <h1>Build social stories as comic strips.</h1>
+          <p class="lede">
+            Add a child's details, describe the situation, and let ChatGPT write a simple, descriptive, lightly funny social story as a comic strip.
+          </p>
+        </div>
+        <div class="hero-burst" aria-hidden="true">
+          <span>POW</span>
+          <span>WOW</span>
+          <span>ZAP</span>
+        </div>
+      </section>
+
+      <section class="studio-grid">
+        <form class="control-card" id="storyForm">
+          <label class="field">
+            <span>Child's name</span>
+            <input id="childName" name="childName" type="text" maxlength="80" placeholder="Maya" required />
+          </label>
+
+          <label class="field">
+            <span>Gender</span>
+            <select id="childGender" name="childGender" required>
+              <option value="girl">Girl</option>
+              <option value="boy">Boy</option>
+              <option value="nonbinary">Non-binary</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span>Interests</span>
+            <input
+              id="childInterests"
+              name="childInterests"
+              type="text"
+              maxlength="180"
+              placeholder="dinosaurs, drawing, trains"
+              required
+            />
+          </label>
+
+          <label class="field">
+            <span>Problem or event</span>
+            <textarea
+              id="storyProblem"
+              name="storyProblem"
+              rows="6"
+              maxlength="500"
+              placeholder="Maya gets upset when it is time to stop drawing and line up for lunch."
+              required
+            ></textarea>
+          </label>
+
+          <label class="field">
+            <span>OpenAI API key</span>
+            <input
+              id="apiKey"
+              name="apiKey"
+              type="password"
+              autocomplete="off"
+              placeholder="sk-..."
+            />
+            <small class="field-hint">
+              Optional here if you set <code>window.APP_CONFIG.openAIApiKey</code> in <code>config.js</code>.
+            </small>
+          </label>
+
+          <div class="action-row">
+            <button class="primary-btn" type="submit">Generate comic story</button>
+            <button class="ghost-btn" id="printButton" type="button">Print strip</button>
+          </div>
+
+          <p class="status-copy" id="statusCopy">Ready to generate with ChatGPT.</p>
+        </form>
+
+        <section class="preview-card" aria-live="polite">
+          <div class="story-header">
+            <p class="eyebrow">Preview</p>
+            <h2 id="storyTitle">A social story for Maya</h2>
+            <p id="storySummary" class="summary-copy">
+              Generate a strip to see illustrated panels, captions, and a gentle resolution.
+            </p>
+          </div>
+
+          <section class="comic-grid" id="comicGrid" aria-label="Comic strip panels"></section>
+        </section>
+      </section>
+    </main>
+
+    <script src="./config.js"></script>
+    <script src="./social.js"></script>
+  </body>
+</html>
