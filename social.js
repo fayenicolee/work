@@ -119,17 +119,6 @@ function setStatus(message, tone = "") {
   }
 }
 
-function describeCharacter(seed, gender) {
-  const hairStyles = ["curly hair", "short hair", "wavy hair", "a neat bob haircut", "a shaggy haircut"];
-  const outfits = ["a bright red hoodie", "a blue superhero shirt", "a green jumper", "a striped t-shirt", "orange overalls"];
-  const expressions = ["warm, expressive eyes", "a playful grin", "a curious face", "animated eyebrows", "a friendly smile"];
-  const genderLabel = gender === "nonbinary" ? "a child" : gender === "boy" ? "a boy" : "a girl";
-
-  return `${genderLabel} with ${hairStyles[seed % hairStyles.length]}, wearing ${
-    outfits[(seed + 1) % outfits.length]
-  }, and ${expressions[(seed + 2) % expressions.length]}`;
-}
-
 function createFallbackPanels(model) {
   const firstInterest = model.interests[0] || "favorite things";
 
@@ -165,24 +154,6 @@ function createFallbackPanels(model) {
       speech: `Small steps win!`
     }
   ];
-}
-
-function parseStoryJson(rawText) {
-  const fencedMatch = rawText.match(/```(?:json)?\s*([\s\S]*?)```/i);
-  const candidate = fencedMatch ? fencedMatch[1].trim() : rawText.trim();
-
-  try {
-    return JSON.parse(candidate);
-  } catch {
-    const start = candidate.indexOf("{");
-    const end = candidate.lastIndexOf("}");
-
-    if (start >= 0 && end > start) {
-      return JSON.parse(candidate.slice(start, end + 1));
-    }
-
-    throw new Error("ChatGPT returned text that was not valid JSON.");
-  }
 }
 
 async function generateSocialStory(model) {
@@ -263,7 +234,7 @@ function renderPanels(model, storyData, options = {}) {
             <img class="panel-ai-image" src="${escapeHtml(panel.imageUrl || "")}" alt="${escapeHtml(panel.title)} illustration"${
               panel.imageUrl ? "" : " hidden"
             } />
-            <div class="panel-art-fallback">${createPanelArt({
+            <div class="panel-art-fallback"${panel.imageUrl ? " hidden" : ""}>${createPanelArt({
               panel,
               panelIndex: index,
               childName: model.childName,

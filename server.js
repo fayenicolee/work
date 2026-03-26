@@ -229,6 +229,12 @@ async function generatePanelImage(model, panel, panelIndex, apiKey) {
 
 async function handleSocialStory(request, response) {
   const apiKey = process.env.OPENAI_API_KEY;
+  let model = {
+    childName: "This child",
+    childGender: "girl",
+    interests: ["favorite things"],
+    problem: "A tricky moment happened."
+  };
 
   if (!apiKey) {
     sendJson(response, 500, { error: "Server is missing OPENAI_API_KEY." });
@@ -237,7 +243,7 @@ async function handleSocialStory(request, response) {
 
   try {
     const body = JSON.parse(await readRequestBody(request) || "{}");
-    const model = {
+    model = {
       childName: String(body.childName || "").trim(),
       childGender: String(body.childGender || "girl").trim(),
       interests: parseInterests(body.interests),
@@ -270,12 +276,7 @@ async function handleSocialStory(request, response) {
       imageFailures
     });
   } catch (error) {
-    const fallback = createFallbackPanels({
-      childName: "This child",
-      childGender: "girl",
-      interests: ["favorite things"],
-      problem: "A tricky moment happened."
-    });
+    const fallback = createFallbackPanels(model);
 
     sendJson(response, 500, {
       error: error.message,

@@ -3,11 +3,7 @@ const books = [
   { title: "Esther", pdf: "./books/Book-2.pdf", thumb: "./books/Book-2.png" },
   { title: "Lola", pdf: "./books/Book-3.pdf", thumb: "./books/Book-3.png" },
   { title: "Sarp", pdf: "./books/Book-4.pdf", thumb: "./books/Book-4.png" },
-  { title: "Picture Book 5", pdf: "./books/Book-5.pdf", thumb: "./books/Book-5.png" },
-  { title: "Picture Book 6", pdf: "./books/Book-6.pdf", thumb: "./books/Book-6.png" },
-  { title: "Picture Book 7", pdf: "./books/Book-7.pdf", thumb: "./books/Book-7.png" },
-  { title: "Picture Book 8", pdf: "./books/Book-8.pdf", thumb: "./books/Book-8.png" },
-  { title: "Picture Book 9", pdf: "./books/Book-9.pdf", thumb: "./books/Book-9.png" }
+  { title: "Vyom", pdf: "./books/Book-7.pdf", thumb: "./books/Book-7.png" },
 ];
 
 const bookGrid = document.getElementById("bookGrid");
