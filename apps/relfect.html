@@ -1,0 +1,729 @@
+<title>Let's Reflect</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Anton&family=Homemade+Apple&family=Jersey+10+Charted&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Space+Mono:wght@400;700&display=swap');
+
+  :root {
+    --paper: #f1ecdf;
+    --card: #e8e1cc;
+    --ink: #17150e;
+    --ink-soft: #58513e;
+    --ink-faint: rgba(23, 21, 14, 0.32);
+    --tape: rgba(23, 21, 14, 0.16);
+    --shadow: rgba(23, 21, 14, 0.22);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #14120f;
+      --card: #1e1b16;
+      --ink: #ece5d2;
+      --ink-soft: #a89d80;
+      --ink-faint: rgba(236, 229, 210, 0.3);
+      --tape: rgba(236, 229, 210, 0.14);
+      --shadow: rgba(0, 0, 0, 0.55);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #14120f;
+    --card: #1e1b16;
+    --ink: #ece5d2;
+    --ink-soft: #a89d80;
+    --ink-faint: rgba(236, 229, 210, 0.3);
+    --tape: rgba(236, 229, 210, 0.14);
+    --shadow: rgba(0, 0, 0, 0.55);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    background-image:
+      radial-gradient(var(--ink-faint) 0.6px, transparent 0.6px);
+    background-size: 10px 10px;
+    color: var(--ink);
+    font-family: "Lora", Georgia, serif;
+    -webkit-font-smoothing: antialiased;
+    padding: clamp(20px, 5vw, 56px) 16px 64px;
+  }
+
+  .wrap {
+    max-width: 760px;
+    margin: 0 auto;
+  }
+
+  a, button { font-family: inherit; color: inherit; }
+
+  :focus-visible {
+    outline: 2px dashed var(--ink);
+    outline-offset: 3px;
+  }
+
+  .kicker {
+    font-family: "Space Mono", monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    text-align: center;
+    margin: 0 0 10px;
+  }
+
+  .masthead {
+    position: relative;
+    text-align: center;
+    padding: 8px 12px 26px;
+    margin-bottom: 6px;
+  }
+
+  .masthead h1 {
+    font-family: "Jersey 10 Charted", "Anton", "Arial Narrow", sans-serif;
+    font-weight: 400;
+    font-size: clamp(3.4rem, 13vw, 5.6rem);
+    letter-spacing: 0.01em;
+    line-height: 0.9;
+    margin: 0;
+    text-transform: uppercase;
+    transform: rotate(-1.4deg);
+    text-wrap: balance;
+  }
+
+  .masthead .torn {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 12px;
+    width: 100%;
+  }
+  .masthead .torn path { fill: var(--paper); }
+
+  .note {
+    background: var(--card);
+    border: 1px solid var(--ink);
+    padding: 20px 24px;
+    max-width: 540px;
+    margin: 10px auto 34px;
+    transform: rotate(0.6deg);
+    box-shadow: 3px 4px 0 var(--shadow);
+    position: relative;
+  }
+  .note p {
+    font-family: "Homemade Apple", "Lora", cursive;
+    font-size: clamp(1.25rem, 3.4vw, 1.55rem);
+    line-height: 1.6;
+  }
+  .note::before {
+    content: "";
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-2deg);
+    width: 46px;
+    height: 18px;
+    background: var(--tape);
+    border: 1px solid var(--ink-faint);
+  }
+  .note p { margin: 0; }
+  .note .sign {
+    display: block;
+    margin-top: 10px;
+    font-family: "Space Mono", monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    text-align: right;
+  }
+
+  section h2 {
+    font-family: "Space Mono", monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin: 0 0 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  section h2::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--ink-faint);
+  }
+
+  .categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 14px;
+    margin-bottom: 8px;
+    padding: 6px 4px 4px;
+  }
+
+  .ticket {
+    appearance: none;
+    background: var(--paper);
+    border: 1.5px solid var(--ink);
+    padding: 16px 22px 15px;
+    min-width: 168px;
+    cursor: pointer;
+    text-align: left;
+    line-height: 1.15;
+    transition: transform 0.15s ease, background 0.15s ease, color 0.15s ease;
+  }
+  .ticket:nth-child(3n+1) { transform: rotate(-1.6deg); }
+  .ticket:nth-child(3n+2) { transform: rotate(1.1deg); }
+  .ticket:nth-child(3n)   { transform: rotate(-0.4deg); }
+  .ticket:hover { transform: rotate(0deg) translateY(-2px); }
+  .ticket .t-name {
+    display: block;
+    font-family: "Anton", sans-serif;
+    font-weight: 400;
+    font-size: 1.3rem;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+  .ticket .t-sub {
+    display: block;
+    font-family: "Space Mono", monospace;
+    font-size: 0.76rem;
+    letter-spacing: 0.05em;
+    color: var(--ink-soft);
+    margin-top: 4px;
+  }
+  .ticket[aria-pressed="true"] {
+    background: var(--ink);
+    color: var(--paper);
+    transform: rotate(0deg) translateY(-1px);
+    box-shadow: 3px 3px 0 var(--shadow);
+  }
+  .ticket[aria-pressed="true"] .t-sub { color: var(--paper); opacity: 0.75; }
+
+  .ticket.wild {
+    border-style: dashed;
+  }
+
+  .draw-row {
+    text-align: center;
+    margin: 30px 0 26px;
+  }
+
+  .draw-btn {
+    appearance: none;
+    background: var(--ink);
+    color: var(--paper);
+    border: none;
+    font-family: "Anton", sans-serif;
+    font-weight: 400;
+    font-size: 1.1rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 15px 34px;
+    cursor: pointer;
+    transform: rotate(-0.8deg);
+    box-shadow: 4px 4px 0 var(--shadow);
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+  }
+  .draw-btn:hover { transform: rotate(0deg) translateY(-2px); box-shadow: 5px 6px 0 var(--shadow); }
+  .draw-btn:active { transform: translateY(1px); box-shadow: 2px 2px 0 var(--shadow); }
+
+  .stage {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 8px;
+  }
+
+  .card {
+    position: relative;
+    width: min(100%, 460px);
+    background: var(--card);
+    border: 1.5px solid var(--ink);
+    border-top: none;
+    padding: 30px 26px 24px;
+    box-shadow: 5px 6px 0 var(--shadow);
+    transform: rotate(-0.5deg);
+    opacity: 0;
+  }
+  .card.is-in {
+    animation: settle 0.42s ease forwards;
+  }
+  @keyframes settle {
+    0%   { opacity: 0; transform: rotate(-4deg) translateY(14px); }
+    70%  { opacity: 1; transform: rotate(0.6deg) translateY(-3px); }
+    100% { opacity: 1; transform: rotate(-0.5deg) translateY(0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .card.is-in { animation: none; opacity: 1; transform: rotate(-0.5deg); }
+  }
+
+  .card .torn-top {
+    position: absolute;
+    top: -11px;
+    left: 0;
+    width: 100%;
+    height: 12px;
+  }
+  .card .torn-top path { fill: var(--card); }
+
+  .tape-piece {
+    position: absolute;
+    width: 50px;
+    height: 18px;
+    background: var(--tape);
+    border: 1px solid var(--ink-faint);
+  }
+  .tape-piece.tl { top: -9px; left: 18px; transform: rotate(-8deg); }
+  .tape-piece.br { bottom: -9px; right: 18px; transform: rotate(6deg); }
+
+  .card-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-family: "Space Mono", monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 16px;
+  }
+
+  .card-q {
+    font-size: clamp(1.2rem, 4vw, 1.5rem);
+    line-height: 1.42;
+    margin: 0 0 20px;
+    text-wrap: balance;
+  }
+
+  .card-foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px dashed var(--ink-faint);
+    padding-top: 12px;
+  }
+
+  .again-link {
+    background: none;
+    border: none;
+    font-family: "Space Mono", monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    cursor: pointer;
+    padding: 4px 0;
+  }
+  .again-link:hover { color: var(--ink); }
+
+  .star-btn {
+    appearance: none;
+    background: none;
+    border: 1px solid var(--ink);
+    padding: 6px 12px;
+    font-family: "Space Mono", monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  .star-btn[aria-pressed="true"] {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .empty-stage {
+    color: var(--ink-soft);
+    font-family: "Space Mono", monospace;
+    font-size: 0.78rem;
+    text-align: center;
+    padding: 40px 20px;
+    border: 1px dashed var(--ink-faint);
+  }
+
+  .kept-section { margin-top: 44px; }
+  .kept-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .kept-head h2 { flex: 1; margin: 0; }
+  #kept-heading {
+    font-family: "Jersey 10 Charted", "Anton", sans-serif;
+    font-size: 2.1rem;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+  .reset-btn {
+    appearance: none;
+    background: none;
+    border: 1px dashed var(--ink);
+    padding: 5px 11px;
+    font-family: "Space Mono", monospace;
+    font-size: 0.66rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    cursor: pointer;
+    margin-bottom: 14px;
+  }
+  .reset-btn:hover { color: var(--ink); border-style: solid; }
+  .kept-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 6px 4px 14px;
+  }
+  .stub {
+    flex: 0 0 auto;
+    width: 170px;
+    background: var(--paper);
+    border: 1px solid var(--ink);
+    border-left: none;
+    padding: 10px 12px;
+    cursor: pointer;
+    position: relative;
+  }
+  .stub::before {
+    content: "";
+    position: absolute;
+    left: -1px;
+    top: 0;
+    bottom: 0;
+    width: 6px;
+    background-image: radial-gradient(circle, var(--paper) 1.6px, var(--ink) 1.7px);
+    background-size: 6px 10px;
+    background-position: -3px 2px;
+  }
+  .stub .s-cat {
+    display: block;
+    font-family: "Space Mono", monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 4px;
+  }
+  .stub .s-q {
+    font-size: 0.8rem;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .kept-empty {
+    font-family: "Space Mono", monospace;
+    font-size: 0.72rem;
+    color: var(--ink-soft);
+    padding: 10px 4px;
+  }
+
+  footer {
+    margin-top: 56px;
+    text-align: center;
+    font-family: "Space Mono", monospace;
+    font-size: 0.64rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    border-top: 1px solid var(--ink-faint);
+    padding-top: 16px;
+  }
+</style>
+
+<div class="wrap">
+  <p class="kicker">metacognition menu</p>
+  <div class="masthead">
+    <h1>Let's Reflect</h1>
+    <svg class="torn" viewBox="0 0 400 12" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M0,12 L14,3 L27,9 L41,2 L55,8 L69,1 L83,7 L97,3 L111,9 L125,2 L139,8 L153,1 L167,7 L181,3 L195,9 L209,2 L223,8 L237,1 L251,7 L265,3 L279,9 L293,2 L307,8 L321,1 L335,7 L349,3 L363,9 L377,2 L391,8 L400,4 L400,12 Z"/>
+    </svg>
+  </div>
+
+  <div class="note">
+    <p>Catch your thinking in the act with these prompts &mdash; whether you're just starting, stuck in the middle, or reflecting afterwards. Pick a category below and save any cards you like to the deck.</p>
+    <span class="sign">64 questions, 8 categories</span>
+  </div>
+
+  <section aria-labelledby="cat-heading">
+    <h2 id="cat-heading">choose a category</h2>
+    <div class="categories" id="categories" role="group" aria-label="Question categories"></div>
+  </section>
+
+  <div class="draw-row">
+    <button class="draw-btn" id="drawBtn" type="button">Pull a card &#9656;</button>
+  </div>
+
+  <div class="stage" id="stage">
+    <div class="empty-stage">pick a category (or leave it on &ldquo;any&rdquo;) and pull a card</div>
+  </div>
+
+  <section class="kept-section" aria-labelledby="kept-heading">
+    <div class="kept-head">
+      <h2 id="kept-heading">kept</h2>
+      <button type="button" class="reset-btn" id="resetBtn">clear &#10005;</button>
+    </div>
+    <div class="kept-row" id="keptRow"></div>
+  </section>
+
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var CATEGORIES = [
+    { id: "before", name: "Before I Start", sub: "the plan", questions: [
+      "What do I already know about this that could help me?",
+      "How hard do I think this will be, and why?",
+      "What's my plan if my first approach doesn't work?",
+      "What would \"doing this well\" actually look like when I'm done?",
+      "Which part am I most nervous about, and what's one way to make it less scary?",
+      "What's my very first move going to be?",
+      "What resources or tools might I need before I begin?",
+      "If this goes well, what will be different afterward?"
+    ]},
+    { id: "while", name: "While I'm Working", sub: "the check-in", questions: [
+      "Can I explain what I just did to someone else, in my own words?",
+      "Am I rushing, or am I actually thinking this through?",
+      "What's confusing me right now, specifically?",
+      "Is the way I'm doing this still working, or should I try something else?",
+      "If I had to stop right now, what would I say I understand so far?",
+      "Am I checking my work as I go, or waiting until the end?",
+      "What would someone watching me right now say I'm doing well?",
+      "Is there a faster or clearer way to do this that I haven't tried?"
+    ]},
+    { id: "stuck", name: "When I'm Stuck", sub: "the jam", questions: [
+      "Have I been stuck like this before? What got me unstuck last time?",
+      "Am I stuck because I don't understand, or because I need to slow down and work through it step-by-step?",
+      "What's one small thing I could try next, even if I'm not sure it'll work?",
+      "Who or what could help me right now — and have I actually tried it?",
+      "What am I avoiding because it feels hard?",
+      "What have I already tried, and why didn't it work?",
+      "Am I stuck on the whole thing, or just one part of it?",
+      "What would happen if I just started somewhere, even the wrong place?"
+    ]},
+    { id: "after", name: "After I Finish", sub: "the debrief", questions: [
+      "What part am I proudest of, and why?",
+      "What would I do differently if I started over?",
+      "Did I check my work, or did I just decide it was done?",
+      "What's one thing I learned that I didn't know before I started?",
+      "Would I be able to do this again without help? What makes me say that?",
+      "Did I meet the goal I set before I started?",
+      "What surprised me about how this went?",
+      "How do I know I'm really done, and not just tired of it?"
+    ]},
+    { id: "mistakes", name: "Mistakes & Struggle", sub: "the wreckage", questions: [
+      "What's a mistake I made recently that actually taught me something?",
+      "Where did my thinking go wrong, exactly — not just \"I got it wrong\"?",
+      "What's the difference between a mistake I should fix and one I should just learn from?",
+      "Did I give up too early on something, or push through when I should've stepped back?",
+      "What would I tell a friend who made the same mistake I just did?",
+      "What's a mistake I keep making, and what pattern do I notice?",
+      "Did I blame the task, or look honestly at what I did?",
+      "What did the struggle itself teach me, separate from the result?"
+    ]},
+    { id: "howithink", name: "How I Think", sub: "the wiring", questions: [
+      "Do I usually jump to an answer, or think it through step by step? Which do I want to do more?",
+      "What kind of thinking do I enjoy most — solving, creating, organizing, arguing, imagining?",
+      "When do I think most clearly — and when do I think least clearly? What affects that?",
+      "What's a thought I had today that I didn't question, but maybe should have?",
+      "Do I trust my first instinct, or my slower, double-checked answer more? Why?",
+      "Do I need quiet to think, or does noise or movement help me?",
+      "What's a belief about my own thinking that might not be true?",
+      "When I explain things, do I use words, pictures, or examples first?"
+    ]},
+    { id: "others", name: "Learning With Others", sub: "the crew", questions: [
+      "Did I actually listen to that idea, or was I just waiting to talk?",
+      "What did someone else notice that I missed?",
+      "Did I explain my thinking clearly enough for someone else to follow it?",
+      "Whose way of solving this was different from mine — what can I take from it?",
+      "Did I ask for help, or did I just struggle quietly?",
+      "Did I change my mind because of what someone said? Why or why not?",
+      "What do I bring to a group that others might not?",
+      "Did I make space for someone quieter to share their idea?"
+    ]},
+    { id: "curiosity", name: "Curiosity & Connections", sub: "the tangent", questions: [
+      "What does this remind me of, from somewhere else?",
+      "What question does this leave me with that nobody answered?",
+      "If I could ask an expert one thing about this, what would it be?",
+      "Where might I actually use this outside of here?",
+      "What's something I used to believe that this is changing?",
+      "What's the most interesting part of this, even if it's not the point?",
+      "What would I want to learn next, if I kept going?",
+      "Is there a pattern here I've seen somewhere completely different?"
+    ]}
+  ];
+
+  var TOTAL = CATEGORIES.reduce(function (n, c) { return n + c.questions.length; }, 0);
+
+  var byId = {};
+  CATEGORIES.forEach(function (c) { byId[c.id] = c; });
+
+  var decks = {};       // catId (or "any") -> shuffled queue of refs
+  var drawnCounts = {}; // catId (or "any") -> how many pulled since last reshuffle
+  var currentCatId = "any";
+  var currentCard = null; // { catId, qIndex }
+  var starred = loadStarred();
+
+  function shuffle(arr) {
+    var a = arr.slice();
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+
+  function buildRefs(catId) {
+    if (catId === "any") {
+      var refs = [];
+      CATEGORIES.forEach(function (c) {
+        c.questions.forEach(function (_, qi) { refs.push({ catId: c.id, qIndex: qi }); });
+      });
+      return refs;
+    }
+    var cat = byId[catId];
+    return cat.questions.map(function (_, qi) { return { catId: cat.id, qIndex: qi }; });
+  }
+
+  function ensureDeck(catId) {
+    if (!decks[catId] || decks[catId].length === 0) {
+      decks[catId] = shuffle(buildRefs(catId));
+      drawnCounts[catId] = 0;
+    }
+  }
+
+  function starKey(ref) { return ref.catId + ":" + ref.qIndex; }
+
+  function loadStarred() {
+    try {
+      var raw = window.localStorage.getItem("lets-reflect:starred");
+      return raw ? JSON.parse(raw) : [];
+    } catch (e) { return []; }
+  }
+  function saveStarred() {
+    try { window.localStorage.setItem("lets-reflect:starred", JSON.stringify(starred)); } catch (e) {}
+  }
+  function isStarred(ref) { return starred.indexOf(starKey(ref)) !== -1; }
+  function toggleStar(ref) {
+    var k = starKey(ref);
+    var i = starred.indexOf(k);
+    if (i === -1) starred.push(k); else starred.splice(i, 1);
+    saveStarred();
+    renderKept();
+  }
+
+  // -- rendering --
+
+  var categoriesEl = document.getElementById("categories");
+  var stageEl = document.getElementById("stage");
+  var drawBtn = document.getElementById("drawBtn");
+  var keptRowEl = document.getElementById("keptRow");
+
+  function renderCategories() {
+    categoriesEl.innerHTML = "";
+    var wild = document.createElement("button");
+    wild.type = "button";
+    wild.className = "ticket wild";
+    wild.setAttribute("aria-pressed", currentCatId === "any" ? "true" : "false");
+    wild.innerHTML = '<span class="t-name">Any category</span><span class="t-sub">surprise me</span>';
+    wild.addEventListener("click", function () { selectCategory("any"); });
+    categoriesEl.appendChild(wild);
+
+    CATEGORIES.forEach(function (c) {
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "ticket";
+      btn.setAttribute("aria-pressed", currentCatId === c.id ? "true" : "false");
+      btn.innerHTML = '<span class="t-name">' + c.name + '</span><span class="t-sub">' + c.sub + '</span>';
+      btn.addEventListener("click", function () { selectCategory(c.id); });
+      categoriesEl.appendChild(btn);
+    });
+  }
+
+  function selectCategory(id) {
+    currentCatId = id;
+    renderCategories();
+  }
+
+  function renderCard(ref, animate) {
+    currentCard = ref;
+    var cat = byId[ref.catId];
+    var q = cat.questions[ref.qIndex];
+    var pos = drawnCounts[currentCatId];
+    var total = currentCatId === "any" ? TOTAL : byId[currentCatId].questions.length;
+    var starredNow = isStarred(ref);
+
+    stageEl.innerHTML =
+      '<div class="card' + (animate ? ' is-in' : '') + '">' +
+        '<svg class="torn-top" viewBox="0 0 400 12" preserveAspectRatio="none" aria-hidden="true">' +
+          '<path d="M0,0 L14,9 L27,3 L41,10 L55,4 L69,11 L83,5 L97,9 L111,3 L125,10 L139,4 L153,11 L167,5 L181,9 L195,3 L209,10 L223,4 L237,11 L251,5 L265,9 L279,3 L293,10 L307,4 L321,11 L335,5 L349,9 L363,3 L377,10 L391,4 L400,8 L400,0 Z"/>' +
+        '</svg>' +
+        '<div class="tape-piece tl"></div>' +
+        '<div class="tape-piece br"></div>' +
+        '<div class="card-meta"><span>' + cat.sub + '</span><span>card ' + pos + ' / ' + total + '</span></div>' +
+        '<p class="card-q">' + q + '</p>' +
+        '<div class="card-foot">' +
+          '<button type="button" class="again-link" id="againBtn">draw again &rarr;</button>' +
+          '<button type="button" class="star-btn" id="starBtn" aria-pressed="' + (starredNow ? "true" : "false") + '">' + (starredNow ? "★ kept" : "☆ keep this one") + '</button>' +
+        '</div>' +
+      '</div>';
+
+    document.getElementById("againBtn").addEventListener("click", draw);
+    document.getElementById("starBtn").addEventListener("click", function () {
+      toggleStar(ref);
+      renderCard(ref, false);
+    });
+  }
+
+  function draw() {
+    ensureDeck(currentCatId);
+    var ref = decks[currentCatId].shift();
+    drawnCounts[currentCatId] = (drawnCounts[currentCatId] || 0) + 1;
+    renderCard(ref, true);
+  }
+
+  function renderKept() {
+    if (starred.length === 0) {
+      keptRowEl.innerHTML = '<p class="kept-empty">nothing kept yet &mdash; tap the star on a card to pin it here.</p>';
+      return;
+    }
+    keptRowEl.innerHTML = "";
+    starred.forEach(function (key) {
+      var parts = key.split(":");
+      var catId = parts[0], qIndex = parseInt(parts[1], 10);
+      var cat = byId[catId];
+      if (!cat || !cat.questions[qIndex]) return;
+      var stub = document.createElement("button");
+      stub.type = "button";
+      stub.className = "stub";
+      stub.innerHTML = '<span class="s-cat">' + cat.sub + '</span><span class="s-q">' + cat.questions[qIndex] + '</span>';
+      stub.addEventListener("click", function () {
+        renderCard({ catId: catId, qIndex: qIndex }, true);
+      });
+      keptRowEl.appendChild(stub);
+    });
+  }
+
+  var resetBtn = document.getElementById("resetBtn");
+
+  drawBtn.addEventListener("click", draw);
+  resetBtn.addEventListener("click", function () {
+    starred = [];
+    saveStarred();
+    renderKept();
+    if (currentCard && stageEl.querySelector("#starBtn")) {
+      renderCard(currentCard, false);
+    }
+  });
+
+  renderCategories();
+  renderKept();
+})();
+</script>
